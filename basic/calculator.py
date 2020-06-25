@@ -1,6 +1,6 @@
-from contents.controller import Controller
+from contacts.controller import Controller
 
-if __name__ == '__main__':
+if __name__ == '__main__':   # if 메인메서드 지정 /자바에서 메인메서드 args 어쩌구 썼던 것과 같은 것!
     def print_menu():
         print('0. Exit')
         print('1. 연락처 추가')
@@ -18,12 +18,17 @@ if __name__ == '__main__':
                          input('이메일\n'),
                          input('주소\n'))
         if menu =='2':
-            print(app.search(input('name')))
+            print(app.search(input('이름\n')))
+
         if menu =='3':
-            result = app.list()
-            print('\n'.join(str(item)) for
-                  item in result)
+            print(app.list())
+
+            #result = app.list()
+            #print('\n'.join(str(item)) for
+            #      item in result)
+
         if menu =='4':
             app.remove(input('name'))
+
         elif menu =='0':
             break
