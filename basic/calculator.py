@@ -1,34 +1,68 @@
-from contacts.controller import Controller
+class Model:
+    def __init__(self):
+        self._num1 = 0
+        self._num2 = 0
+        self._opcode = ''
 
-if __name__ == '__main__':   # if 메인메서드 지정 /자바에서 메인메서드 args 어쩌구 썼던 것과 같은 것!
-    def print_menu():
-        print('0. Exit')
-        print('1. 연락처 추가')
-        print('2. 연락처 이름 검색')
-        print('3. 연락처 전체 목록')
-        print('4. 연락처 이름 삭제')
-        return input('menu\n')
+    @property
+    def num1(self) -> int: return self._num1
+    @num1.setter
+    def num1(self, num1): self._num1 = num1
+    @property
+    def num2(self) -> int: return self._num2
+    @num2.setter
+    def num2(self, num2): self._num2 = num2
+    @property
+    def opcode(self) -> str: return self._opcode
+    @opcode.setter
+    def opcode(self, opcode): self._opcode = opcode
+class Service:
+    def __init__(self, payload):
+        self._num1 = payload.num1
+        self._num2 = payload.num2
 
-    app = Controller()
-    while 1:
-        menu = print()
-        if menu =='1':
-            app.register(input('이름\n'),
-                         input('전화번호\n'),
-                         input('이메일\n'),
-                         input('주소\n'))
-        if menu =='2':
-            print(app.search(input('이름\n')))
+    def add(self):
+        return self._num1 + self._num2
 
-        if menu =='3':
-            print(app.list())
+    def minus(self):
+        return self._num1 - self._num2
 
-            #result = app.list()
-            #print('\n'.join(str(item)) for
-            #      item in result)
+    def multi(self):
+        return self._num1 * self._num2
 
-        if menu =='4':
-            app.remove(input('name'))
+    def divide(self):
+        return self._num1 / self._num2
 
-        elif menu =='0':
-            break
+class Controller:
+
+    def calc(self, num1, num2, opcode):
+        model = Model()
+        model.num1 = num1
+        model.num2 = num2
+        model.opcode = opcode
+        service = Service(model)
+        if opcode == '+': result = service.add()
+        if opcode == '-': result = service.minus()
+        if opcode == '*': result = service.multi()
+        if opcode == '/': result = service.divide()
+        return result
+
+
+def print_menu():
+    print('0. Exit')
+    print('1. Calculator')
+    return input('Menu\n')
+
+
+while 1:
+    menu = print_menu()
+    if menu == '0': break
+    if menu == '1':
+        app = Controller()
+        print('계산기 작동')
+        num1 = int(input('첫번째 수\n'))
+        opcode = input('연산자\n')
+        num2 = int(input('두번째 수\n'))
+
+        result = app.calc(num1, num2, opcode)
+        print('결과: %d ' % result)

@@ -12,25 +12,21 @@ class Model:
 
     @property
     def url(self) -> str: return self._url
-
     @url.setter
     def url(self, url): self._url = url
 
     @property
     def parser(self) -> str: return self._parser
-
     @parser.setter
     def parser(self, parser): self._parser = parser
 
     @property
     def path(self) -> str: return self._path
-
     @path.setter
     def path(self, path): self._path = path
 
     @property
     def api(self) -> str: return self._api
-
     @api.setter
     def api(self, api): self._api = api
 
@@ -49,6 +45,16 @@ class Service:
             print('노래제목: {}'.format(i.text))
 
 
+    def naver_movie(self, payload):
+        driver = webdriver.Chrome(payload.path)
+        driver.get(payload.url)
+        soup = BeautifulSoup(urlopen(payload.url), payload.parser) # 이것의 장점은 스크립트까지 다 긁어온다.
+        #print(soup.prettify())
+        arr = [div.a.string for div in soup.find_all('div', attrs={'class':'tit3'})]   #리스트와 튜플 비교
+        for i in arr:
+            print(i)
+        driver.close()
+
 class Controller:
     def __init__(self):
         self.service = Service()
@@ -58,7 +64,14 @@ class Controller:
         self.model.url = url
         self.model.parser = 'lxml'
         self.service.bugs_music(self.model)
+    # lxml
 
+    def naver_movie(self, url):
+        self.model.url = url
+        self.model.parser = 'html.parser'
+        self.model.path = 'data/chromedriver.exe'
+        self.service.naver_movie(self.model)
+    # html.parser
 
 
 def print_menu():
@@ -74,6 +87,6 @@ while 1:
     if menu == '1':
         app.bugs_music('https://music.bugs.co.kr/chart/track/realtime/total?chartdate=20200625&charthour=12')
     if menu == '2':
-        pass
+        app.naver_movie('https://movie.naver.com/movie/sdb/rank/rmovie.nhn')
     elif menu == '0':
         break
